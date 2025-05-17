@@ -195,135 +195,135 @@ if __name__ == "__main__":
     print(f"Folders found in bucket: {folders}")
     print(f"New folders to process: {new_folders}")
 
-    # for s3_folder in folders:
-    #     print(f"Processing S3 folder: {s3_folder}")
-    #
-    #     local_folder = os.path.join(local_base_dir, os.path.basename(s3_folder.strip('/')))
-    #     print(f"Local folder path: {local_folder}")
-    #
-    #     # Extract form data and send notification email
-    #     name, email, input_desc = extract_form_data(local_folder)
-    #     if name and email:
-    #         subject = f"Results received for: {input_desc or 'your sample'}"
-    #         body = (
-    #             f"Hi {name},\n\n"
-    #             "We have received your sequencing data.\n"
-    #             "You will recieve another email once the results are ready.\n\n"
-    #             "If you have any questions, feel free to reach out.\n\n"
-    #             "Best regards,\nEvolvingSTEM Team\n"
-    #         )
-    #         sender_email = "binfo@midauthorbio.com"
-    #         send_email_without_attachment(
-    #             sender_email=sender_email,
-    #             recipient_email=email,
-    #             subject=subject,
-    #             body=body
-    #         )
-    #     else:
-    #         print(f"No valid form-data.txt found or missing email/name in: {local_folder}")
-    #
-    #     download_s3_folder(bucket_name, s3_folder, local_folder)
-    #
-    #     fastq_files = find_fastq_files(local_folder)
-    #     print(f"FASTQ files found: {fastq_files}")
-    #
-    #     # Define output directory
-    #     output_dir = os.path.join(local_folder, os.path.basename(local_folder) + '_output')
-    #     print(f"Output directory path: {output_dir}")
-    #
-    #     # Skip breseq if output_dir already exists
-    #     if not os.path.exists(output_dir):
-    #         print("Output directory does not exist. Skipping breseq processing.")
-    #         if fastq_files:
-    #             run_breseq_command(local_folder, fastq_files)
-    #     else:
-    #         print("Output directory already exists. Skipping breseq command.")
-    #
-    #     # Proceed to mutation extraction and coverage calculations
-    #     if os.path.exists(output_dir):
-    #         print(f"Processing output directory: {output_dir}")
-    #
-    #         # Mutation file extraction
-    #         mutation_file = os.path.join(output_dir, "mutation_predictions.json")
-    #         extract_mutations(output_dir)
-    #         if os.path.exists(mutation_file):
-    #             print(f"Mutation file exists: {mutation_file}")
-    #         else:
-    #             print(f"Mutation file does not exist: {mutation_file}")
-    #
-    #         # Coverage file processing
-    #         coverage_file = os.path.join(output_dir, "data", "coverage.txt")
-    #         coverage_file = run_samtools_command(output_dir)
-    #         if coverage_file and os.path.exists(coverage_file):
-    #             print(f"Coverage file exists: {coverage_file}")
-    #         else:
-    #             print(f"Coverage file does not exist: {coverage_file}")
-    #
-    #         # Averages file creation
-    #         averages_file = os.path.join(output_dir, "averages.csv")
-    #         if coverage_file:
-    #             calculate_coverage_averages(coverage_file, output_dir)
-    #             if os.path.exists(averages_file):
-    #                 print(f"Averages file exists: {averages_file}")
-    #             else:
-    #                 print(f"Averages file does not exist: {averages_file}")
-    #
-    #         # Attempt to upload files to S3
-    #         print("Starting upload to S3...")
-    #         if os.path.exists(mutation_file):
-    #             print(f"Uploading mutation file: {mutation_file}")
-    #             upload_file_to_s3(bucket_name, s3_folder, mutation_file)
-    #         else:
-    #             print(f"Mutation file not found, skipping upload: {mutation_file}")
-    #
-    #         if os.path.exists(coverage_file):
-    #             print(f"Uploading coverage file: {coverage_file}")
-    #             upload_file_to_s3(bucket_name, s3_folder, coverage_file)
-    #         else:
-    #             print(f"Coverage file not found, skipping upload: {coverage_file}")
-    #
-    #         if os.path.exists(averages_file):
-    #             print(f"Uploading averages file: {averages_file}")
-    #             upload_file_to_s3(bucket_name, s3_folder, averages_file)
-    #         else:
-    #             print(f"Averages file not found, skipping upload: {averages_file}")
-    #     else:
-    #         print(f"Output directory not found, skipping further processing for: {s3_folder}")
-    #
-    #     # Cleanup: delete the local folder after processing (commented out for testing)
-    #     # import shutil
-    #     # shutil.rmtree(local_folder)
-    #     append_seen_folder(log_file_path, s3_folder)
-    #
-    #     # Generate presigned URLs for download links
-    #     download_links = []
-    #     for file_path in [mutation_file, coverage_file, averages_file]:
-    #         if os.path.exists(file_path):
-    #             key = os.path.join(s3_folder, os.path.basename(file_path))
-    #             url = generate_presigned_url(bucket_name, key, expiration=86400)
-    #             if url:
-    #                 short_url = shorten_url(url)
-    #                 download_links.append(f"{os.path.basename(file_path)}: {short_url}")
-    #
-    #     if name and email and download_links:
-    #         subject = f"Results ready for: {input_desc or 'your sample'}"
-    #         body = (
-    #                 f"Hi {name},\n\n"
-    #                 "Your sequencing data has been processed. You can access your results at the links below:\n\n"
-    #                 "🔬 Web Viewer: https://htmlviewer.midauthorbio.com\n\n"
-    #                 "📥 Downloadable Files:\n" +
-    #                 "\n".join(download_links) + "\n\n"
-    #                                             "If you have any questions, feel free to reach out.\n\n"
-    #                                             "Best regards,\nEvolvingSTEM Team"
-    #         )
-    #         send_email_without_attachment(
-    #             sender_email="binfo@midauthorbio.com",
-    #             recipient_email=email,
-    #             subject=subject,
-    #             body=body
-    #         )
-    #
-    #     print(f"Completed processing for folder: {s3_folder}")
+    for s3_folder in folders:
+        print(f"Processing S3 folder: {s3_folder}")
+
+        local_folder = os.path.join(local_base_dir, os.path.basename(s3_folder.strip('/')))
+        print(f"Local folder path: {local_folder}")
+
+        # Extract form data and send notification email
+        name, email, input_desc = extract_form_data(local_folder)
+        if name and email:
+            subject = f"Results received for: {input_desc or 'your sample'}"
+            body = (
+                f"Hi {name},\n\n"
+                "We have received your sequencing data.\n"
+                "You will recieve another email once the results are ready.\n\n"
+                "If you have any questions, feel free to reach out.\n\n"
+                "Best regards,\nEvolvingSTEM Team\n"
+            )
+            sender_email = "binfo@midauthorbio.com"
+            send_email_without_attachment(
+                sender_email=sender_email,
+                recipient_email=email,
+                subject=subject,
+                body=body
+            )
+        else:
+            print(f"No valid form-data.txt found or missing email/name in: {local_folder}")
+
+        download_s3_folder(bucket_name, s3_folder, local_folder)
+
+        fastq_files = find_fastq_files(local_folder)
+        print(f"FASTQ files found: {fastq_files}")
+
+        # Define output directory
+        output_dir = os.path.join(local_folder, os.path.basename(local_folder) + '_output')
+        print(f"Output directory path: {output_dir}")
+
+        # Skip breseq if output_dir already exists
+        if not os.path.exists(output_dir):
+            print("Output directory does not exist. Skipping breseq processing.")
+            if fastq_files:
+                run_breseq_command(local_folder, fastq_files)
+        else:
+            print("Output directory already exists. Skipping breseq command.")
+
+        # Proceed to mutation extraction and coverage calculations
+        if os.path.exists(output_dir):
+            print(f"Processing output directory: {output_dir}")
+
+            # Mutation file extraction
+            mutation_file = os.path.join(output_dir, "mutation_predictions.json")
+            extract_mutations(output_dir)
+            if os.path.exists(mutation_file):
+                print(f"Mutation file exists: {mutation_file}")
+            else:
+                print(f"Mutation file does not exist: {mutation_file}")
+
+            # Coverage file processing
+            coverage_file = os.path.join(output_dir, "data", "coverage.txt")
+            coverage_file = run_samtools_command(output_dir)
+            if coverage_file and os.path.exists(coverage_file):
+                print(f"Coverage file exists: {coverage_file}")
+            else:
+                print(f"Coverage file does not exist: {coverage_file}")
+
+            # Averages file creation
+            averages_file = os.path.join(output_dir, "averages.csv")
+            if coverage_file:
+                calculate_coverage_averages(coverage_file, output_dir)
+                if os.path.exists(averages_file):
+                    print(f"Averages file exists: {averages_file}")
+                else:
+                    print(f"Averages file does not exist: {averages_file}")
+
+            # Attempt to upload files to S3
+            print("Starting upload to S3...")
+            if os.path.exists(mutation_file):
+                print(f"Uploading mutation file: {mutation_file}")
+                upload_file_to_s3(bucket_name, s3_folder, mutation_file)
+            else:
+                print(f"Mutation file not found, skipping upload: {mutation_file}")
+
+            if os.path.exists(coverage_file):
+                print(f"Uploading coverage file: {coverage_file}")
+                upload_file_to_s3(bucket_name, s3_folder, coverage_file)
+            else:
+                print(f"Coverage file not found, skipping upload: {coverage_file}")
+
+            if os.path.exists(averages_file):
+                print(f"Uploading averages file: {averages_file}")
+                upload_file_to_s3(bucket_name, s3_folder, averages_file)
+            else:
+                print(f"Averages file not found, skipping upload: {averages_file}")
+        else:
+            print(f"Output directory not found, skipping further processing for: {s3_folder}")
+
+        # Cleanup: delete the local folder after processing (commented out for testing)
+        # import shutil
+        # shutil.rmtree(local_folder)
+        append_seen_folder(log_file_path, s3_folder)
+
+        # Generate presigned URLs for download links
+        download_links = []
+        for file_path in [mutation_file, coverage_file, averages_file]:
+            if os.path.exists(file_path):
+                key = os.path.join(s3_folder, os.path.basename(file_path))
+                url = generate_presigned_url(bucket_name, key, expiration=86400)
+                if url:
+                    short_url = shorten_url(url)
+                    download_links.append(f"{os.path.basename(file_path)}: {short_url}")
+
+        if name and email and download_links:
+            subject = f"Results ready for: {input_desc or 'your sample'}"
+            body = (
+                    f"Hi {name},\n\n"
+                    "Your sequencing data has been processed. You can access your results at the links below:\n\n"
+                    "🔬 Web Viewer: https://htmlviewer.midauthorbio.com\n\n"
+                    "📥 Downloadable Files:\n" +
+                    "\n".join(download_links) + "\n\n"
+                                                "If you have any questions, feel free to reach out.\n\n"
+                                                "Best regards,\nEvolvingSTEM Team"
+            )
+            send_email_without_attachment(
+                sender_email="binfo@midauthorbio.com",
+                recipient_email=email,
+                subject=subject,
+                body=body
+            )
+
+        print(f"Completed processing for folder: {s3_folder}")
 
     print("All folders processed.")
 
