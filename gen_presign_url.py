@@ -11,7 +11,7 @@ import pyshorteners
 #     aws_secret_access_key='YOUR_SECRET_KEY',
 #     aws_session_token='YOUR_SESSION_TOKEN', region_name='us-east-2')
 
-s3 = boto3.client('s3', region_name='us-east-2')
+s3 = boto3.client('s3', region_name='us-east-1')
 
 def shorten_url(long_url):
     try:
@@ -25,7 +25,7 @@ def shorten_url(long_url):
 
 def generate_presigned_url(bucket_name, object_key, expiration=86400):
     # s3_client = boto3.client('s3')
-    s3_client = boto3.client('s3', config=Config(signature_version='s3v4'), region_name='us-east-2') # Enforce AWS Signature Version 4
+    s3_client = boto3.client('s3', config=Config(signature_version='s3v4'), region_name='us-east-1') # Enforce AWS Signature Version 4
     try:
         url = s3_client.generate_presigned_url(
             'get_object',
