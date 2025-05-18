@@ -198,7 +198,7 @@ if __name__ == "__main__":
     for s3_folder in folders:
         print(f"Processing S3 folder: {s3_folder}")
 
-        local_folder = os.path.join(local_base_dir, os.path.basename(s3_folder.strip('/')))
+        local_folder = os.path.join(local_base_dir, s3_folder)
         print(f"Local folder path: {local_folder}")
 
         # Extract form data and send notification email
