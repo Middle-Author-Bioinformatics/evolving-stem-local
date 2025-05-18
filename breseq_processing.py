@@ -21,13 +21,11 @@ def extract_form_data(folder_path):
     if os.path.exists(form_file):
         with open(form_file, "r") as f:
             for line in f:
-                if line.startswith("Name"):
-                    name = line.strip().split(" ", 1)[1]
-                elif line.startswith("Email"):
+                if line.startswith("Email"):
                     email = line.strip().split(" ", 1)[1]
-                elif line.startswith("Input"):
+                elif line.startswith("Organism"):
                     input_desc = line.strip().split(" ", 2)[2]
-    return name, email, input_desc
+    return email, input_desc
 
 def load_seen_folders(log_path):
     if os.path.exists(log_path):
@@ -202,11 +200,11 @@ if __name__ == "__main__":
         print(f"Local folder path: {local_folder}")
 
         # Extract form data and send notification email
-        name, email, input_desc = extract_form_data(local_folder)
-        if name and email:
+        email, input_desc = extract_form_data(local_folder)
+        if  email:
             subject = f"Results received for: {input_desc or 'your sample'}"
             body = (
-                f"Hi {name},\n\n"
+                f"Hi,\n\n"
                 "We have received your sequencing data.\n"
                 "You will recieve another email once the results are ready.\n\n"
                 "If you have any questions, feel free to reach out.\n\n"
