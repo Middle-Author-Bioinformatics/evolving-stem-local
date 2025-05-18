@@ -193,7 +193,7 @@ if __name__ == "__main__":
     print(f"Folders found in bucket: {folders}")
     print(f"New folders to process: {new_folders}")
 
-    for s3_folder in folders:
+    for s3_folder in new_folders:
         print(f"Processing S3 folder: {s3_folder}")
 
         local_folder = os.path.join(local_base_dir, s3_folder)
