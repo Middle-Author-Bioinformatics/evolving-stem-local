@@ -79,10 +79,9 @@ def find_fastq_files(folder_path):
                 if f.endswith('.fastq') or f.endswith('.fastq.gz')]
     return fastq_files
 
-def run_breseq_command(folder_path, fastq_files):
+def run_breseq_command(folder_path, fastq_files, output_dir):
     gbk_file = '/home/ark/MAB/evolvingstem/GCA_000009225.gbk'
 
-    output_dir = os.path.join(folder_path, os.path.basename(folder_path) + '_output')
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -235,7 +234,7 @@ if __name__ == "__main__":
         if not os.path.exists(output_dir):
             print("Output directory does not exist. Skipping breseq processing.")
             if fastq_files:
-                run_breseq_command(local_folder, fastq_files)
+                run_breseq_command(local_folder, fastq_files, output_dir)
         else:
             print("Output directory already exists. Skipping breseq command.")
 
@@ -305,12 +304,12 @@ if __name__ == "__main__":
                     short_url = shorten_url(url)
                     download_links.append(f"{os.path.basename(file_path)}: {short_url}")
 
-        if name and email and download_links:
+        if email and download_links:
             subject = f"Results ready for: {input_desc or 'your sample'}"
             body = (
-                    f"Hi {name},\n\n"
+                    f"Hi,\n\n"
                     "Your sequencing data has been processed. You can access your results at the links below:\n\n"
-                    "🔬 Web Viewer: https://htmlviewer.midauthorbio.com\n\n"
+                    "Web Viewer: https://master.d7c59d4mm6saq.amplifyapp.com\n\n"
                     "📥 Downloadable Files:\n" +
                     "\n".join(download_links) + "\n\n"
                                                 "If you have any questions, feel free to reach out.\n\n"
