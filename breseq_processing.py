@@ -24,7 +24,7 @@ def extract_form_data(folder_path):
                 if line.startswith("Email"):
                     email = line.strip().split(" ", 1)[1]
                 elif line.startswith("Organism"):
-                    input_desc = line.strip().split(" ", 2)[2]
+                    input_desc = line.strip().split(" ", 2)[1:]
     return email, input_desc
 
 def load_seen_folders(log_path):
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         # Extract form data and send notification email
         email, input_desc = extract_form_data(local_folder)
         if  email:
-            subject = f"Results received for: {input_desc or 'your sample'}"
+            subject = f"Data received for: {input_desc or 'your sample'}"
             body = (
                 f"Hi,\n\n"
                 "We have received your sequencing data.\n"
