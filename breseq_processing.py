@@ -184,6 +184,7 @@ if __name__ == "__main__":
     bucket_name = 'evolvingstembucket'
     local_base_dir = '/home/ark/MAB/evolvingstem/data'
     folders = list_folders_in_bucket(bucket_name)
+    output_dir = '/home/ark/MAB/evolvingstem/results'
 
     seen_folders = load_seen_folders(log_file_path)
 
@@ -226,7 +227,8 @@ if __name__ == "__main__":
         print(f"FASTQ files found: {fastq_files}")
 
         # Define output directory
-        output_dir = os.path.join(local_folder, os.path.basename(local_folder) + '_output')
+        output_dir = os.path.join(output_dir, s3_folder)
+        # os.system(f"mkdir -p {output_dir}")
         print(f"Output directory path: {output_dir}")
 
         # Skip breseq if output_dir already exists
