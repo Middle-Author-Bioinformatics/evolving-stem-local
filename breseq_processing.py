@@ -174,6 +174,22 @@ def calculate_coverage_averages(coverage_file, output_dir):
     averages_df.to_csv(averages_file, index=False)
     print(f"Coverage averages saved to {averages_file}")
 
+
+def upload_directory_to_s3(bucket_name, s3_folder, local_directory):
+    s3_client = boto3.client('s3')
+
+    for root, dirs, files in os.walk(local_directory):
+        for filename in files:
+            local_file_path = os.path.join(root, filename)
+
+            # Build the S3 key path relative to the directory being uploaded
+            relative_path = os.path.relpath(local_file_path, local_directory)
+            s3_key = os.path.join(s3_folder, relative_path).replace("\\", "/")
+
+            print(f"Uploading {local_file_path} to s3://{bucket_name}/{s3_key}")
+            s3_client.upload_file(local_file_path, bucket_name, s3_key)
+
+
 def upload_file_to_s3(bucket_name, s3_folder, local_file):
     s3_key = os.path.join(s3_folder, os.path.basename(local_file))
     s3_client.upload_file(local_file, bucket_name, s3_key)
@@ -272,7 +288,7 @@ if __name__ == "__main__":
             print("Starting upload to S3...")
             if os.path.exists(output_dir):
                 print(f"Uploading output dir: {output_dir}")
-                upload_file_to_s3(bucket_name, s3_folder, output_dir)
+                upload_directory_to_s3(bucket_name, s3_folder, output_dir)
             else:
                 print(f"Mutation file not found, skipping upload: {output_dir}")
 
