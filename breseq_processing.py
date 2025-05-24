@@ -199,9 +199,11 @@ if __name__ == "__main__":
         local_folder = os.path.join(local_base_dir, s3_folder)
         print(f"Local folder path: {local_folder}")
 
+        download_s3_folder(bucket_name, s3_folder, local_folder)
+
         # Extract form data and send notification email
         email, input_desc = extract_form_data(local_folder)
-        if  email:
+        if email:
             subject = f"Data received for your {input_desc} variant-calling analysis"
             body = (
                 f"Hi,\n\n"
@@ -220,7 +222,6 @@ if __name__ == "__main__":
         else:
             print(f"No valid form-data.txt found or missing email/name in: {local_folder}")
 
-        download_s3_folder(bucket_name, s3_folder, local_folder)
 
         fastq_files = find_fastq_files(local_folder)
         print(f"FASTQ files found: {fastq_files}")
