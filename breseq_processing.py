@@ -297,7 +297,7 @@ if __name__ == "__main__":
 
         # Generate presigned URLs for download links
         download_links = []
-        for file_path in [mutation_file, coverage_file, averages_file]:
+        for file_path in [output_dir]:
             if os.path.exists(file_path):
                 key = os.path.join(s3_folder, os.path.basename(file_path))
                 url = generate_presigned_url(bucket_name, key, expiration=86400)
