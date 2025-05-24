@@ -233,11 +233,11 @@ if __name__ == "__main__":
 
         # Skip breseq if output_dir already exists
         if not os.path.exists(output_dir):
-            print("Output directory does not exist. Skipping breseq processing.")
+            print("Output directory does not exist. Running Breseq.")
             if fastq_files:
                 run_breseq_command(local_folder, fastq_files, output_dir)
         else:
-            print("Output directory already exists. Skipping breseq command.")
+            print("Output directory already exists. Skipping Breseq.")
 
         # Proceed to mutation extraction and coverage calculations
         if os.path.exists(output_dir):
