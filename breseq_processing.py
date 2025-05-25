@@ -288,7 +288,11 @@ if __name__ == "__main__":
             print("Starting upload to S3...")
             if os.path.exists(output_dir):
                 print(f"Uploading output dir: {output_dir}")
-                upload_directory_to_s3(bucket_name, s3_folder, output_dir)
+                # s3_folder = s3_folder.rstrip('/')
+                # compress the output folder below
+                os.system(f"tar -czf {output_dir}.tar.gz -C {output_dir} .")
+                outtar = f"{output_dir}.tar.gz"
+                upload_file_to_s3(bucket_name, s3_folder, outtar)
             else:
                 print(f"Mutation file not found, skipping upload: {output_dir}")
 
