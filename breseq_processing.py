@@ -255,6 +255,7 @@ if __name__ == "__main__":
         else:
             print("Output directory already exists. Skipping Breseq.")
 
+        outtar = ''
         # Proceed to mutation extraction and coverage calculations
         if os.path.exists(output_dir):
             print(f"Processing output directory: {output_dir}")
@@ -323,7 +324,7 @@ if __name__ == "__main__":
 
         # Generate presigned URLs for download links
         download_links = []
-        for file_path in [output_dir]:
+        for file_path in [outtar]:
             if os.path.exists(file_path):
                 key = os.path.join(s3_folder, os.path.basename(file_path))
                 url = generate_presigned_url(bucket_name, key, expiration=86400)
