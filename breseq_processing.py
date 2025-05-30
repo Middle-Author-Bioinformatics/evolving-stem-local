@@ -205,6 +205,9 @@ if __name__ == "__main__":
 
     new_folders = [f for f in folders if f not in seen_folders]
 
+    for s3_folder in new_folders:
+        append_seen_folder(log_file_path, s3_folder)
+
     # Debugging: Check if folders are retrieved
     print(f"Folders found in bucket: {folders}")
     print(f"New folders to process: {new_folders}")
@@ -320,7 +323,6 @@ if __name__ == "__main__":
         # Cleanup: delete the local folder after processing (commented out for testing)
         # import shutil
         # shutil.rmtree(local_folder)
-        append_seen_folder(log_file_path, s3_folder)
 
         # Generate presigned URLs for download links
         download_links = []
