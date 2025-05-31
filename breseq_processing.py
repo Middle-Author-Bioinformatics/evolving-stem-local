@@ -88,7 +88,7 @@ def run_breseq_command(folder_path, fastq_files, output_dir):
     fastq_files_str = ' '.join(fastq_files)
 
     command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str}"
-    full_command = ['conda', 'run', '-n', 'breseq_env', 'bash', '-c', command]
+    full_command = ['/home/ark/miniconda3/bin/conda', 'run', '-n', 'breseq_env', 'bash', '-c', command]
 
     result = subprocess.run(full_command, capture_output=True, text=True)
     if result.returncode != 0:
