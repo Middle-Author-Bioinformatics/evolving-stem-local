@@ -300,23 +300,23 @@ if __name__ == "__main__":
             else:
                 print(f"Mutation file not found, skipping upload: {output_dir}")
 
-            # if os.path.exists(mutation_file):
-            #     print(f"Uploading mutation file: {mutation_file}")
-            #     upload_file_to_s3(bucket_name, s3_folder, mutation_file)
-            # else:
-            #     print(f"Mutation file not found, skipping upload: {mutation_file}")
-            #
-            # if os.path.exists(coverage_file):
-            #     print(f"Uploading coverage file: {coverage_file}")
-            #     upload_file_to_s3(bucket_name, s3_folder, coverage_file)
-            # else:
-            #     print(f"Coverage file not found, skipping upload: {coverage_file}")
-            #
-            # if os.path.exists(averages_file):
-            #     print(f"Uploading averages file: {averages_file}")
-            #     upload_file_to_s3(bucket_name, s3_folder, averages_file)
-            # else:
-            #     print(f"Averages file not found, skipping upload: {averages_file}")
+            if os.path.exists(mutation_file):
+                print(f"Uploading mutation file: {mutation_file}")
+                upload_file_to_s3(bucket_name, s3_folder, mutation_file)
+            else:
+                print(f"Mutation file not found, skipping upload: {mutation_file}")
+
+            if os.path.exists(coverage_file):
+                print(f"Uploading coverage file: {coverage_file}")
+                upload_file_to_s3(bucket_name, s3_folder, coverage_file)
+            else:
+                print(f"Coverage file not found, skipping upload: {coverage_file}")
+
+            if os.path.exists(averages_file):
+                print(f"Uploading averages file: {averages_file}")
+                upload_file_to_s3(bucket_name, s3_folder, averages_file)
+            else:
+                print(f"Averages file not found, skipping upload: {averages_file}")
         else:
             print(f"Output directory not found, skipping further processing for: {s3_folder}")
 
