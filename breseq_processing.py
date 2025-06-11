@@ -114,13 +114,14 @@ def run_samtools_command(output_dir):
         print(f"Samtools depth ran successfully.")
     return coverage_file
 
+
 def extract_mutations(output_dir):
     html_file_path = os.path.join(output_dir, "output", "index.html")
-    
+
     if not os.path.exists(html_file_path):
         print(f"Error: index.html not found in {output_dir}")
         return
-    
+
     with open(html_file_path, "r", encoding="utf-8") as file:
         html_content = file.read()
 
@@ -137,13 +138,28 @@ def extract_mutations(output_dir):
         print("Error: Could not find the mutation table.")
         return
 
+    # Define mutations to ignore
+    ignored_mutations = {
+        ("45881", "+G"),
+        ("985333", "+C"),
+        ("3447984", "(C)5→3"),
+        ("3447984", "(C)₅→3"),  # Unicode subscript 5 version if encountered
+        ("3,447,984", "(C)5→3"),
+        ("3,447,984", "(C)₅→3"),  # With commas
+    }
+
     data = []
     for row in mutation_table.find_all("tr", class_="normal_table_row"):
         columns = row.find_all("td")
         if len(columns) >= 6:
+            pos = columns[1].get_text(strip=True).replace(",", "")
+            mut = columns[2].get_text(strip=True).replace("₅", "5")  # Normalize subscript
+            if (pos, mut) in ignored_mutations:
+                continue
+
             entry = {
-                "position": columns[1].get_text(strip=True),
-                "mutation": columns[2].get_text(strip=True),
+                "position": pos,
+                "mutation": mut,
                 "annotation": columns[3].get_text(strip=True),
                 "gene": columns[4].get_text(strip=True),
                 "description": columns[5].get_text(strip=True)
@@ -153,6 +169,7 @@ def extract_mutations(output_dir):
     json_file_path = os.path.join(output_dir, "mutation_predictions.json")
     with open(json_file_path, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file, indent=4, ensure_ascii=False)
+
 
 def calculate_coverage_averages(coverage_file, output_dir):
     averages_file = os.path.join(output_dir, "averages.csv")
