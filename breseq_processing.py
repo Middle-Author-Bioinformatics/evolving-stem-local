@@ -25,7 +25,9 @@ def extract_form_data(folder_path):
                     email = line.strip().split(" ", 1)[1]
                 elif line.startswith("Organism"):
                     input_desc = " ".join(line.strip().split(" ", 2)[1:])
-    return email, input_desc
+                elif line.startswith("Polymorphic"):
+                    poly = " ".join(line.strip().split(" ", 2)[1:])
+    return email, input_desc, poly
 
 def load_seen_folders(log_path):
     if os.path.exists(log_path):
@@ -79,15 +81,18 @@ def find_fastq_files(folder_path):
                 if f.endswith('.fastq') or f.endswith('.fastq.gz')]
     return fastq_files
 
-def run_breseq_command(folder_path, fastq_files, output_dir):
+def run_breseq_command(folder_path, fastq_files, output_dir, poly):
     gbk_file = '/home/ark/MAB/evolvingstem/GCA_000009225.gbk'
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     fastq_files_str = ' '.join(fastq_files)
+    if poly == "Clonal":
+        command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str}"
+    else:
+        command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str} --polymorphism-prediction"
 
-    command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str}"
     full_command = ['/home/ark/miniconda3/bin/conda', 'run', '-n', 'breseq_env', 'bash', '-c', command]
 
     result = subprocess.run(full_command, capture_output=True, text=True)
@@ -238,7 +243,7 @@ if __name__ == "__main__":
         download_s3_folder(bucket_name, s3_folder, local_folder)
 
         # Extract form data and send notification email
-        email, input_desc = extract_form_data(local_folder)
+        email, input_desc, poly = extract_form_data(local_folder)
         if email:
             subject = f"Data received for your {input_desc} variant-calling analysis"
             body = (
@@ -271,7 +276,7 @@ if __name__ == "__main__":
         if not os.path.exists(output_dir):
             print("Output directory does not exist. Running Breseq.")
             if fastq_files:
-                run_breseq_command(local_folder, fastq_files, output_dir)
+                run_breseq_command(local_folder, fastq_files, output_dir, poly)
         else:
             print("Output directory already exists. Skipping Breseq.")
 
