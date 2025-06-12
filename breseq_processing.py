@@ -314,9 +314,16 @@ if __name__ == "__main__":
             # Averages file creation
             bam_file = os.path.join(output_dir, "data", "reference.bam")
             if os.path.exists(bam_file):
-                print(f"BAM file exists: {averages_file}")
+                print(f"BAM file exists: {bam_file}")
             else:
-                print(f"BAM file does not exist: {averages_file}")
+                print(f"BAM file does not exist: {bam_file}")
+
+            # Averages file creation
+            bai_file = os.path.join(output_dir, "data", "reference.bam.bai")
+            if os.path.exists(bai_file):
+                print(f"BAM file exists: {bai_file}")
+            else:
+                print(f"BAM file does not exist: {bai_file}")
 
             # Attempt to upload files to S3
             print("Starting upload to S3...")
@@ -353,6 +360,12 @@ if __name__ == "__main__":
                 upload_file_to_s3(bucket_name, s3_folder, bam_file)
             else:
                 print(f"BAM file not found, skipping upload: {bam_file}")
+
+            if os.path.exists(bai_file):
+                print(f"Uploading BAI file: {bai_file}")
+                upload_file_to_s3(bucket_name, s3_folder, bai_file)
+            else:
+                print(f"BAI file not found, skipping upload: {bai_file}")
         else:
             print(f"Output directory not found, skipping further processing for: {s3_folder}")
 
