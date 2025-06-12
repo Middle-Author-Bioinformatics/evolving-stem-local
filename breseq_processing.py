@@ -50,9 +50,9 @@ def list_folders_in_bucket(bucket_name):
             if key.endswith("form-data.txt"):
                 parts = key.split('/')
                 if len(parts) >= 3:
-                    if user in ["ark", "dna", "amatella"]:
-                        user = parts[0]
-                        subfolder = parts[1]
+                    user = parts[0]
+                    subfolder = parts[1]
+                    if user in ["ark", "dna", "amatella", "vscooper"]:
                         folders.add(f"{user}/{subfolder}/")
     return sorted(folders)
 
