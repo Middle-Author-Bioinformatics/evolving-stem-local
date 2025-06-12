@@ -218,7 +218,7 @@ def upload_file_to_s3(bucket_name, s3_folder, local_file):
     print(f"Uploaded {local_file} to s3://{bucket_name}/{s3_key}")
 
 if __name__ == "__main__":
-    bucket_name = 'evolvingstembucket'
+    bucket_name = 'breseqbucket'
     local_base_dir = '/home/ark/MAB/evolvingstem/data'
     folders = list_folders_in_bucket(bucket_name)
     output_dir = '/home/ark/MAB/evolvingstem/results'
