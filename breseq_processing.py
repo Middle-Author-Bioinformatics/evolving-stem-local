@@ -88,7 +88,7 @@ def run_breseq_command(folder_path, fastq_files, output_dir, poly):
         os.makedirs(output_dir)
 
     fastq_files_str = ' '.join(fastq_files)
-    if poly == "Clonal":
+    if poly == "clonal":
         command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str}"
     else:
         command = f"breseq -l 60 -t -j 8 -o {output_dir} -r {gbk_file} {fastq_files_str} --polymorphism-prediction"
