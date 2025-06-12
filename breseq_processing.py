@@ -50,9 +50,10 @@ def list_folders_in_bucket(bucket_name):
             if key.endswith("form-data.txt"):
                 parts = key.split('/')
                 if len(parts) >= 3:
-                    user = parts[0]
-                    subfolder = parts[1]
-                    folders.add(f"{user}/{subfolder}/")
+                    if user in ["ark", "dna", "amatella"]:
+                        user = parts[0]
+                        subfolder = parts[1]
+                        folders.add(f"{user}/{subfolder}/")
     return sorted(folders)
 
 def download_s3_folder(bucket_name, s3_folder, local_dir):
