@@ -390,7 +390,7 @@ if __name__ == "__main__":
             body = (
                     f"Hi,\n\n"
                     "Your sequencing data has been processed. You can access your results at the links below:\n\n"
-                    "Web Viewer: https://master.d7c59d4mm6saq.amplifyapp.com\n\n"
+                    "Web Viewer: https://evolvingstem.midauthorbio.com\n\n"
                     "📥 Downloadable Files:\n" +
                     "\n".join(download_links) + "\n\n"
                                                 "If you have any questions, feel free to reach out.\n\n"
