@@ -11,7 +11,7 @@ import pyshorteners
 #     aws_secret_access_key='YOUR_SECRET_KEY',
 #     aws_session_token='YOUR_SESSION_TOKEN', region_name='us-east-2')
 
-s3 = boto3.client('s3', region_name='us-east-1')
+s3 = boto3.client('s3', region_name='us-east-2')
 
 def shorten_url(long_url):
     try:
