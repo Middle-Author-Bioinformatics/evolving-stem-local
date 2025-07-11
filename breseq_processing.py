@@ -53,7 +53,7 @@ def list_folders_in_bucket(bucket_name):
                 if len(parts) >= 3:
                     user = parts[0]
                     subfolder = parts[1]
-                    if user in ["ark", "dna", "ammatela", "vscooper"]:
+                    if user in ["ark", "dna", "ammatela", "vscooper", "cws43", "nac209", "dnelson1", "frotis", "foley", "cruhe1", "ondecka", "smueller1", "rreinkin", "pavia27"]:
                         print(user)
                         folders.add(f"{user}/{subfolder}/")
     return sorted(folders)
